@@ -67,9 +67,21 @@ A **hard design-signoff gate** (detail → review → sign off → THEN build) i
 
 When writing code, docs, changelogs, comments, or PR prose, **don't hardcode the principal's hardware/environment specifics** — absolute paths, hostnames, usernames, machine layout. Generalize to a neutral example ("a session whose binary lives on a slow-to-mount volume"). Low-sensitivity leaks are tolerable case-by-case, but avoid by default. (Credentials / keys / tokens are a separate, absolute never-leak rule.)
 
+## Spawning an agent — drive it to a full boot, and pick the right permission tier
+
+Standing up an agent is **not finished at `st launch`.** The child comes up in a pty and hits **startup gates** (workspace-trust, the dev-channels warning, resume-choice) that must be **answered** before it's actually running. You own the spawn *through* those gates:
+- Launch with `--unattended` so the gates auto-answer, then **verify the child actually booted** — status `available`, inbox draining. Don't trust the auto-poker blindly; harness frames go stale, and a child parked on a gate is a silent stall.
+- If a gate is stuck, answer it (`pty send <session> --seq key:return`). The agent isn't spawned until it's fully up and processing its inbox.
+
+**Permission tiers — spawners bypass, workers auto.** An agent that *spawns* other agents needs `bypassPermissions`; the auto-mode classifier hard-blocks autonomous spawning, so a spawner in `auto` is inert.
+- **You (CoS)** and **supervisors** are spawners → launched with `--permission-mode bypassPermissions` (+ `--permanent`, since you persist).
+- **Workers** do the work and don't spawn → launched in **`auto`** (the safe leaf default). Don't hand a worker bypass.
+
+So the hierarchy is **CoS → supervisor → worker**: you spawn supervisors (bypass), supervisors spawn workers (auto), and each spawner drives its child through the startup gates to a real boot.
+
 ## Diagnose + recover a crashed/frozen harness
 
-These harnesses (Claude Code, Codex, etc.) are buggy — they crash, freeze, and **wedge** (e.g. context saturation). Telling "parked" from "broken" and recovering the broken one is part of the job (shared with the [supervisor](supervisor.draft.md) role).
+These harnesses (Claude Code, Codex, etc.) are buggy — they crash, freeze, and **wedge** (e.g. context saturation). Telling "parked" from "broken" and recovering the broken one is part of the job (shared with the [supervisor](supervisor.md) role).
 
 - **Parked** (alive, next action drafted-but-unsent) → a poke/directive advances it. **Crashed/frozen/wedged** (input won't clear via ctrl+u/Esc, pane not repainting, stuck at high context %, **incoming smalltalk messages stop being processed**) → **`pty restart <session>`** (resumes the pinned session-id). For a context-saturation wedge, resume **from summary** so it gets headroom (a deliberate exception to the usual full-restore rule). Post-restart startup gates (trust-folder / channels-dev / resume-choice) are legit pty pokes.
 - **Hard rule:** poke a pty when *necessary* (clear a wedge, answer a startup gate, restart) — **never type a smalltalk message's content into a pty to force delivery.** Channels deliver automatically to a *healthy* agent via inbox files; if a message doesn't arrive, that's a **bug to identify**, not to hand-deliver around.

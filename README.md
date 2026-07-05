@@ -36,8 +36,9 @@ to its own private repo.
   team, channels, comms style).
 - **`manager.md` / `technical-manager.md`** — team-lead roles (a manager owns a team; a
   technical manager also writes code).
-- **`specialist.md`** — a single-repo implementer.
-- **`supervisor.draft.md`** — a watchdog/verifier role (draft).
+- **`specialist.md`** — a single-repo implementer (a worker that owns a repo).
+- **`supervisor.md`** — the middle tier: spawns + drives workers and keeps them progressing (`CoS → supervisor → worker`); a spawner, runs `bypassPermissions`.
+- **`worker.md`** — a generalized leaf actor: does one job, doesn't spawn (runs `auto`).
 - **`standalone.md`** — an agent that owns its own repo end-to-end.
 - **`dev-practices.md`** — cross-cutting engineering norms.
 - **`known-harness-bugs.md`** — real Claude Code / Codex quirks to expect + how to
