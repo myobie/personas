@@ -85,6 +85,27 @@ one installed harness can complete a real task.
 - Don't block setup on optional gaps — surface them. Block only on the essentials
   (can't spawn / can't message = not ready).
 
+## Stand up the team
+
+The interview captured the person's repos (Step 2). **A CoS with no specialists can't
+accomplish anything** — so stand up a briefed specialist per repo. This is the step
+that turns "I set up a chief of staff" into "I have a team that gets work done."
+
+Do it **lazily by default** (spin up a specialist the first time real work arrives for
+that repo) — it's cheaper than booting everyone at once. Offer eager ("stand up all of
+them now") if they'd rather. For each repo, when you stand its agent up:
+
+1. **Spawn it:** `st launch <harness> --identity <repo>-agent`, **run in that repo's
+   directory** so the agent owns that codebase. Use their harness (their `--agent`
+   alias if they set one).
+2. **Brief it:** hand it the `specialist.md` role contract + one line on what the repo
+   is and its current priority (from the interview).
+3. **Confirm it's alive:** on the bus (status `available`), inbox drained.
+4. **Record it** in `team.md` — identity + repo it owns.
+
+Now you have someone to delegate to. When the person asks for work on a repo, you brief
+its specialist (standing it up first if it isn't running), walk the result, and surface.
+
 ## Finishing
 
 1. Write all the files into the private `cos` repo and **commit** ("first-run
