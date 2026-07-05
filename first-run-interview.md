@@ -7,9 +7,11 @@ private `cos` repo that the person owns.
 
 ## When it runs
 
-On boot, check for a populated private `cos` repo (an `identity.md` with a set
-principal). **If it exists → skip this entirely** and operate normally. **If it's
-missing or empty → run the interview.** Never re-run it over an existing setup.
+On boot, check for a **populated** private `cos` repo, defined precisely: `identity.md`
+exists **and** has a non-empty `name:`. **If so → skip this entirely** and operate
+normally. **If `identity.md` is missing, or present but blank → run the interview.**
+Never re-run it over a populated setup (a stub identity with a blank name still counts
+as "not yet set up").
 
 ## Principles
 
@@ -29,8 +31,10 @@ missing or empty → run the interview.** Never re-run it over an existing setup
 **0. Where does your private CoS repo live?**
 Default: **the current directory** — the person picked the location by running the
 init command there (like `git init`), so the cwd *becomes* their private `cos`
-repo. Confirm that's what they want, or let them name a different path. Init it as
-a git repo (`git init` if it isn't one already). This repo holds everything private
+repo. Confirm that's what they want, or let them name a different path. **If the cwd is
+already non-empty or an unrelated git repo, warn and confirm before using it** — don't
+co-mingle with existing work; offer a subdirectory or a different path. Init it as a git
+repo (`git init` if it isn't one already). This repo holds everything private
 — their identity, roster, priorities, trackers. Offer to add a private GitHub remote
 (their call; default: local-only, they can add a remote later).
 
@@ -52,13 +56,14 @@ a git repo (`git init` if it isn't one already). This repo holds everything priv
 **4. Who else is around?**
 - Other people (collaborators) or other agents already running.
 - For collaborators: name + how they fit. For agents: name + what they own.
-→ fills in `team.md`.
+→ **merges** into `team.md` — append people/agents to the Step-2 project roster; never
+overwrite it (both steps write the same file).
 
 **5. What should I watch for you?**
 - Which real-world channels to sweep, if any: email, calendar, messages,
   reminders. Only the ones they've wired up + want watched. (Multi-select form.)
 - Quiet hours (default: overnight in their timezone — no non-urgent pushes).
-→ writes the sweep config into `priorities.md` or a `sweeps.md`.
+→ writes the sweep config into `sweeps.md` (the one canonical location).
 
 **6. How do you like to be kept in the loop?**
 - Push notifications when you're needed? (default: yes — err toward pushing.)
