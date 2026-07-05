@@ -66,6 +66,20 @@ a git repo (`git init` if it isn't one already). This repo holds everything priv
 - Anything you never want me to do without asking? (free-form.)
 → writes `comms.md` (your working agreement with them).
 
+## Verify the machine is ready
+
+Before you tell them you're ready, **prove the machine can actually do work in the
+network.** Clone the public evals (`st-evals`) and run its **basic readiness set** —
+a small smoke suite that runs only the cells this setup supports (capability
+detection: which harnesses/tools are installed determines what runs). It confirms the
+essentials: the bus works, an agent can be spawned, messages round-trip, and at least
+one installed harness can complete a real task.
+
+- **Report the result plainly:** ready to go, or here's what's missing (e.g. "Codex
+  isn't installed, so those cells are skipped" / "the bus smoke failed — here's the fix").
+- Don't block setup on optional gaps — surface them. Block only on the essentials
+  (can't spawn / can't message = not ready).
+
 ## Finishing
 
 1. Write all the files into the private `cos` repo and **commit** ("first-run
