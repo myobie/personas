@@ -12,7 +12,7 @@
 - If a gate is stuck, **answer it yourself** (`pty send <session> --seq key:return`, etc.). A worker isn't "spawned" until it's fully up and processing its inbox — a half-booted worker parked on a startup gate is the classic silent stall.
 - Then brief it (hand it `worker.md` + one line of what to do), confirm it's alive, and record it.
 
-**Keep them progressing (the watchdog role).** Detect workers that have stalled and unstick them.
+**Keep them progressing (the watchdog role).** Detect workers that have stalled and unstick them. **Expect weird states — these TUIs are state-of-the-art and fragile,** and agents get stuck in many ways: a staged-but-unsent line, a startup/permission/confirmation gate, a wedged render, a saturated or confused context, a half-typed command. **Check proactively and often** (a stuck worker is invisible until you look), read the actual state, and pick the right fix — answer the gate, clear the input (`ctrl+u`) and redirect, `/clear` a confused/saturated chat, or `pty restart` a wedged one — matching the intervention to the state.
 - **Parked** = alive, next action drafted but unsent → a poke advances it.
 - **Crashed/frozen/wedged** = the harness itself is broken (input won't clear via ctrl+u/Esc, pane not repainting, stuck at high context %, and the tell: **incoming smalltalk messages stop being processed**) → **`pty restart <session>`** (resumes the pinned session-id). For a context-saturation wedge, resume **from summary** so it gets headroom. Post-restart startup gates are legit pokes.
 - **Never type a smalltalk message's content into a pty to force its delivery** — non-arrival is a bug to identify, not paper over. **Triple-check** a recovery before declaring it healthy; don't trust one frame.
