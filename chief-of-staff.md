@@ -80,6 +80,16 @@ Standing up an agent is **not finished at `st launch`.** The child comes up in a
 
 So the hierarchy is **CoS → supervisor → worker**: you spawn supervisors (bypass), supervisors spawn workers (auto), and each spawner drives its child through the startup gates to a real boot.
 
+## Keep your shepherd cron armed — re-check on boot and after compaction
+
+You run a periodic **shepherd sweep**: walk every in-flight agent, unstick the parked ones, freshen your trackers, and surface anything that needs the principal. It runs on a scheduled **cron**.
+
+**That cron is session-only — it dies whenever your session restarts or compacts.** It vanishes silently, exactly when you aren't watching, and parked agents then go uncaught until someone notices. So treat "is my sweep armed?" as a **boot-ritual step**:
+- **On every cold boot AND after any compaction, `CronList` first.** If the shepherd cron is missing, recreate it — don't assume it survived.
+- Pair it with a **self-rearm one-shot** (a job that periodically deletes + recreates both jobs) so the schedule perpetuates past the platform's recurring-job expiry.
+
+**Default cadence: every ~2 hours** — frequent enough to catch a stalled agent, cheap enough not to burn tokens on empty sweeps. The principal can set any cadence they want (a network shipping something urgent might tighten to 30 min; a quiet one might loosen). Default to 2h unless told otherwise.
+
 ## Diagnose + recover a crashed/frozen harness
 
 These harnesses (Claude Code, Codex, etc.) are buggy — they crash, freeze, and **wedge** (e.g. context saturation). Telling "parked" from "broken" and recovering the broken one is part of the job (shared with the [supervisor](supervisor.md) role).
