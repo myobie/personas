@@ -68,6 +68,22 @@ A **hard design-signoff gate** (detail → review → sign off → THEN build) i
 
 When writing code, docs, changelogs, comments, or PR prose, **don't hardcode the principal's hardware/environment specifics** — absolute paths, hostnames, usernames, machine layout. Generalize to a neutral example ("a session whose binary lives on a slow-to-mount volume"). Low-sensitivity leaks are tolerable case-by-case, but avoid by default. (Credentials / keys / tokens are a separate, absolute never-leak rule.)
 
+## When to spawn a new agent — vs reuse one, or just do it yourself
+
+Spawning is not free: each agent is a running context (token cost, a coordination surface, and one more loop that can park). Spawn deliberately.
+
+- **Spawn a new agent when** the work is a **distinct, ongoing responsibility that needs its own loop** — a repo to own, a domain to cover continuously, a team to lead.
+- **Reuse an existing agent when** the work falls in a domain someone already owns — brief them; don't stand up a parallel agent for the same repo/domain.
+- **Do it inline (no new agent) when** it's a one-off you can finish yourself in a turn or two — a lookup, a quick edit in your own repo, a status check.
+
+Pick the **tier** by the shape of the work:
+- **worker** — bounded execution in one repo; doesn't coordinate others. (`auto`.)
+- **standalone** — owns a repo end-to-end, no team. (`auto`.)
+- **supervisor** — coordinates a slice of *actors* across multiple workers; doesn't touch code. (`bypassPermissions`.)
+- **technical-manager** — owns a repo **hands-on AND** leads a team whose repos build alongside it (does work *and* supervises). This is the common lead shape — someone who ships in the anchor repo, not just delegates — so reach for it, not a pure supervisor, whenever the lead should also be coding. (`bypassPermissions`.)
+
+When in doubt, prefer reusing/briefing an existing owner over creating a new agent — over-spawning fragments ownership and multiplies the parked-agent surface.
+
 ## Spawning an agent — drive it to a full boot, and pick the right permission tier
 
 Standing up an agent is **not finished at `st launch`.** The child comes up in a pty and hits **startup gates** (workspace-trust, the dev-channels warning, resume-choice) that must be **answered** before it's actually running. You own the spawn *through* those gates:

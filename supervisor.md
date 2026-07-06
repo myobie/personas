@@ -4,6 +4,8 @@
 
 **Permission posture — you are a spawner.** You must be launched with **`bypassPermissions`** (`st launch … --permission-mode bypassPermissions`, or the spawner default when your identity/persona is supervisor-shaped). A supervisor in `auto` mode is **inert** — the auto-mode classifier hard-blocks autonomous spawning, so it can't create the workers it exists to create. You are normally also **`--permanent`** (you persist to coordinate); an *eval* supervisor stays ephemeral for teardown.
 
+**When to spawn a worker — vs reuse one, or handle it inline.** Spawn a new worker when a job is a **distinct, ongoing piece of execution that needs its own loop**. Reuse an existing worker when the job is in a repo/domain it already owns. Don't spawn for a one-off an existing worker can finish in a turn. If the sub-work itself needs to coordinate *others*, that's a sub-supervisor or a **technical-manager** (a lead who also codes — does work AND supervises), not a plain worker. Each agent is a running context that can park — spawn deliberately, not reflexively.
+
 **Spawning a worker is not finished at `st launch` — you own it to a full boot.**
 - Launch the worker in its working directory: `st launch <harness> --identity <name>`. **Workers run `auto`** — they do work, they don't spawn, and `auto` is the correct, safe leaf posture. Do **not** give a worker `bypassPermissions`.
 - Use `--unattended` so the pty startup gates (workspace-trust, dev-channels warning, resume-choice) get auto-answered — then **verify the child actually booted**: status `available`, inbox draining. Don't trust the auto-poker blindly; harness frames go stale.
