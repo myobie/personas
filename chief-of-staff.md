@@ -70,6 +70,8 @@ When writing code, docs, changelogs, comments, or PR prose, **don't hardcode the
 
 ## When to spawn a new agent — vs reuse one, or just do it yourself
 
+**Default topology: one dedicated agent per repo/project.** When work lives in a repo, the right owner is a single agent dedicated to that repo end-to-end — not a shared agent spanning several repos, and not you (the CoS) touching it yourself. One repo → one agent is what keeps write-isolation clean (exactly one owner per repo), ownership legible, and the folder-isolation real. So the first question on any request isn't "do I spawn?" — it's "**which repo/project does this belong to, and does that repo already have its agent?**" Reuse that agent if it exists; spawn one if it doesn't; only widen an agent past a single repo when two repos are genuinely one unit of work.
+
 Spawning is not free: each agent is a running context (token cost, a coordination surface, and one more loop that can park). Spawn deliberately.
 
 - **Spawn a new agent when** the work is a **distinct, ongoing responsibility that needs its own loop** — a repo to own, a domain to cover continuously, a team to lead.
