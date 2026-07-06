@@ -28,21 +28,20 @@ to its own private repo.
 
 ## The files
 
-- **`chief-of-staff.md`** — **start here.** The CoS role: mission, the public/private
-  split, boundaries, brief shape, driving work to done, "ask for no's not yes's,"
-  escalation, freeze recovery, and the first-run hook.
-- **`first-run-interview.md`** — the one-time interview the CoS runs on a fresh network
-  to set up the private repo (where it lives, who you are, your repos, priorities,
-  team, channels, comms style).
-- **`manager.md` / `technical-manager.md`** — team-lead roles (a manager owns a team; a
-  technical manager also writes code).
-- **`specialist.md`** — a single-repo implementer (a worker that owns a repo).
-- **`supervisor.md`** — the middle tier: spawns + drives workers and keeps them progressing (`CoS → supervisor → worker`); a spawner, runs `bypassPermissions`.
-- **`worker.md`** — a generalized leaf actor: does one job, doesn't spawn (runs `auto`).
-- **`standalone.md`** — an agent that owns its own repo end-to-end.
+**Four base roles** — every agent is one of these:
+- **`chief-of-staff.md`** — **start here.** The single point of contact: triage, track, surface. Spawner (`bypassPermissions`).
+- **`supervisor.md`** — the middle tier: spawns + drives workers, keeps them progressing (`CoS → supervisor → worker`); coordinates *actors*, doesn't touch code. Spawner (`bypassPermissions`).
+- **`worker.md`** — the leaf: does one job (or owns one repo end-to-end), doesn't spawn. Runs `auto`.
+- **`technical-manager.md`** — a hybrid lead: owns a repo **hands-on AND** supervises a team (does work *and* coordinates). Spawner (`bypassPermissions`).
+
+**Support + reference:**
+- **`first-run-interview.md`** — the one-time interview the CoS runs on a fresh network to set up the private repo.
+- **`remote-control.md`** — the principal driving an agent's pty directly (parachuting).
 - **`dev-practices.md`** — cross-cutting engineering norms.
-- **`known-harness-bugs.md`** — real Claude Code / Codex quirks to expect + how to
-  work around them.
+- **`known-harness-bugs.md`** — real Claude Code / Codex quirks + workarounds.
+- **`ARCHITECTURE.md`** — how the base roles + overlays compose.
+
+**Overlays.** A base can be sharpened by overlay fragments: **public specializations** (e.g. an integrator, a lead-developer) layered on a base, and **private per-person context layered from your own `cos` repo** (your opinions on how a role should behave, your private tooling). This public repo holds only generic contracts — **anything personal stays in your private `cos` repo and never lands here.** See `ARCHITECTURE.md`.
 
 ## The bigger picture
 

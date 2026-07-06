@@ -4,26 +4,25 @@ Each agent's effective persona is **composed from layers**, so the public repo s
 
 **base (public, this repo)** + **specialization overlay(s) (public, this repo)** + **private overlay (the person's private `cos` repo)** → the **effective persona** the agent runs with.
 
-## The three bases
+## The four bases
 
-Every agent is one of three:
+Every agent is one of four:
 
 - **`chief-of-staff`** — the single point of contact; triages, tracks, surfaces. Spawner → `bypassPermissions` + `--permanent`.
-- **`supervisor`** — spawns and drives a layer of workers; keeps them progressing. Spawner → `bypassPermissions` + `--permanent`.
-- **`worker`** — does the work; doesn't spawn. Leaf → `auto`.
+- **`supervisor`** — spawns and drives a layer of workers; keeps them progressing; coordinates *actors*, doesn't touch code. Spawner → `bypassPermissions` + `--permanent`.
+- **`worker`** — does the work (one task, or owns one repo end-to-end); doesn't spawn. Leaf → `auto`.
+- **`technical-manager`** — a hybrid: owns a repo **hands-on AND** supervises a team whose repos build alongside it (does work *and* coordinates). Spawner → `bypassPermissions` + `--permanent`.
 
-The hierarchy is `chief-of-staff → supervisor → worker`.
+The hierarchy is `chief-of-staff → supervisor → worker`, with a technical-manager standing in for a supervisor when the lead should also be shipping code.
 
 ## Specialization overlays (public)
 
-A worker (or supervisor) can be **typed** by a public overlay that adds role-specifics on top of the base. An overlay is a persona **fragment**: it *assumes* the base and sharpens it — it never restates the base.
+A base can be **typed** by a public overlay that adds role-specifics on top. An overlay is a persona **fragment**: it *assumes* the base and sharpens it — it never restates the base.
 
-- `overlays/worker/specialist.md` — a worker that owns one repo end-to-end (review/merge/ship).
 - `overlays/worker/integrator.md` — a worker that stitches multiple repos/systems together.
 - `overlays/worker/lead-developer.md` — a worker with architectural authority over a codebase.
-- `overlays/supervisor/manager.md` / `technical-manager.md` — team-lead flavors of supervisor.
 
-(Add more as roles clarify. Specializations are shareable — anyone can use `integrator`.)
+(Add more as roles clarify. Specializations are shareable — anyone can use `integrator`. Overlays are optional; the four bases stand on their own.)
 
 ## Private overlays (the person's `cos` repo)
 
@@ -33,7 +32,7 @@ The person's private `cos` repo overlays **private context** onto any base or sp
 - private tooling only they have (described so the agent knows to reach for it),
 - anything person-specific that must not be public.
 
-Convention: private overlays live at `cos/overlays/<base-or-specialization>.md` (e.g. `cos/overlays/worker.md`, `cos/overlays/integrator.md`).
+Convention: private overlays live at `cos/overlays/<base-or-specialization>.md` (e.g. `cos/overlays/worker.md`, `cos/overlays/integrator.md`). **They are committed to the private `cos` repo only — never to this public personas repo. Nothing person-specific belongs here.**
 
 ## Composition (at launch)
 
