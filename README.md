@@ -12,7 +12,7 @@ elsewhere (see below).
   repos, no priorities, no PII.
 - **A private `cos` repo (per person):** the actual network state — who the principal
   is, their roster, priorities, and the CoS's trackers (`team.md`, `priorities.md`,
-  `WAITING-ON-YOU.md`, `IN-FLIGHT.md`). Never shared.
+  `SITREP.md`, `IN-FLIGHT.md`). Never shared.
 
 The private data isn't *scrubbed out* of the public repo — it never goes in. The CoS
 gathers it per-person via the **first-run interview** (`first-run-interview.md`) the
