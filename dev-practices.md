@@ -20,5 +20,11 @@ Standing engineering discipline. The point: **never end up in a state where so m
 ## 5. When you're stuck, shrink the surface
 - Reproduce the failure in the smallest possible case. A green baseline + one small change + a test after is always faster than debugging a large uncommitted diff.
 
+## 6. Git: keep it simple, follow the repo's conventions
+- **Simplicity is a safety property.** Over-complicating git work makes benign changes *look* dangerous — to the permission system and to humans — and the added complexity is itself the risk. The **shape** of an operation matters.
+- **Follow the repo's worktree convention.** If a repo uses `../<repo>--<branch>` worktrees beside the main repo, use that — permanent + discoverable — not a scratch/temp dir.
+- **Work on the existing branch; don't invent side branches.** To get commits onto a PR branch, check out *that* branch and put the commits there (cherry-pick if needed) — don't build parallel branches and try to graft them across.
+- **A plain push of your own checked-out tracking branch is normal; a cross-branch push into someone else's PR branch is not** — the latter reads as (and is) a dangerous shared-resource modification, and the permission system will block it, correctly.
+
 ---
 *Origin (2026-07-02): an agent restructured a compose view (input-row wrapping + accessory-view edits), broke the app, and misattributed the failure to a "headless keyboard" environment limit. the principal caught it in minutes by driving the app by hand. These practices exist so that doesn't recur.* Pairs with [[evidence-only-no-flattery]] and the drive-to-done "done = the human can use it" bar.
