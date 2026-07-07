@@ -17,19 +17,18 @@ Entry format: symptom → diagnosis → recovery/workaround → status.
 
 ---
 
-## Idle-agent delivery-wake is unreliable
-- **Symptom:** a smalltalk message delivered to a healthy, low-context, **idle** agent's inbox sometimes doesn't re-trigger the agent's loop — the message sits unprocessed. A bare Enter doesn't wake it; a pty poke (a short wake pointer + a separate `key:return`) does, after which it reads the inbox and acts normally.
-- **Diagnosis:** the file-watch layer (FSEvents/chokidar) can drop the underlying `add` event so the channel notification never surfaces.
-- **Recovery/workaround:** run the bus's **polling backstop** if it has one (recommended — it closes the gap and idle agents wake with zero keystrokes). Absent that, poke the loop to wake it — NOT by typing the message content (the message is already delivered; just wake the loop).
-- **Status:** fixable in the bus (polling backstop); a launch-time async-rewake hook is useful defense-in-depth.
+## Idle-agent delivery-wake — solved by ding
+- **Was (non-ding / MCP-only path):** a message delivered to a healthy, low-context, **idle** agent's inbox sometimes didn't re-trigger its loop — the file-watch layer (FSEvents/chokidar) could drop the underlying `add` event so the channel notification never surfaced. A bare Enter didn't wake it; a pty poke did.
+- **Solved by ding:** the **ding sidecar is the polling backstop** — it wakes an idle agent on message arrival with zero keystrokes, closing the FSEvents gap. **On a ding-based network this is not a live bug** (ding-mode delivery-wake is proven).
+- **Status:** resolved for ding agents. Only the legacy non-ding path had the gap — and the network is moving ding-only, so this retires with it.
 
 ---
 
-## Spawned agent can inherit the launcher's identity
-- **Symptom:** an agent launched from *another* agent's shell can inherit the launcher's identity env — a child booting as if it were the CoS — so its bus tools resolve to the wrong inbox (reads/writes the launcher's, not its own).
-- **Fix:** the launcher must write the child's identity (`ST_AGENT`) explicitly into the generated `pty.toml` env and never rely on inheritance. `st launch` does this now — the child's own identity wins over any leaked env.
+## Spawned agent inheriting the launcher's identity — impossible with convoy
+- **Was:** an agent launched from *another* agent's shell could inherit the launcher's identity env — a child booting as if it were the CoS — so its bus tools resolved to the wrong inbox.
+- **Impossible with convoy:** `convoy add` is footgun-proof by design — it writes the child's identity explicitly into the generated config and never relies on env inheritance. That is the whole point; a convoy-added agent *cannot* inherit the launcher's identity.
 - **Good behavior to preserve:** an agent unsure of its identity should *pause and ask* rather than act as someone else.
-- **Status:** resolved in `st launch` (identity written into `pty.toml`, kill-tested).
+- **Status:** resolved by convoy (footgun-proof add). The live network inherits this at the convoy migration.
 
 ---
 
