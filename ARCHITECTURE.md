@@ -9,9 +9,9 @@ Each agent's effective persona is **composed from layers**, so the public repo s
 Every agent is one of four:
 
 - **`chief-of-staff`** — the single point of contact; triages, tracks, surfaces. Spawner → `bypassPermissions` + `--permanent`.
-- **`supervisor`** — spawns and drives a layer of workers; keeps them progressing; coordinates *actors*, doesn't touch code. Spawner → `bypassPermissions` + `--permanent`.
+- **`supervisor`** — spawns and drives a layer of workers; keeps them progressing; orchestrates *actors*, doesn't touch code. Spawner → `bypassPermissions` + `--permanent`.
 - **`worker`** — does the work (one task, or owns one repo end-to-end); doesn't spawn. Leaf → `auto`.
-- **`technical-manager`** — a hybrid: owns a repo **hands-on AND** supervises a team whose repos build alongside it (does work *and* coordinates). Spawner → `bypassPermissions` + `--permanent`.
+- **`technical-manager`** — a hybrid: owns a repo **hands-on AND** supervises a team whose repos build alongside it (does work *and* orchestrates). Spawner → `bypassPermissions` + `--permanent`.
 
 The hierarchy is `chief-of-staff → supervisor → worker`, with a technical-manager standing in for a supervisor when the lead should also be shipping code.
 

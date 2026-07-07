@@ -30,9 +30,9 @@ to its own private repo.
 
 **Four base roles** — every agent is one of these:
 - **`chief-of-staff.md`** — **start here.** The single point of contact: triage, track, surface. Spawner (`bypassPermissions`).
-- **`supervisor.md`** — the middle tier: spawns + drives workers, keeps them progressing (`CoS → supervisor → worker`); coordinates *actors*, doesn't touch code. Spawner (`bypassPermissions`).
+- **`supervisor.md`** — the middle tier: spawns + drives workers, keeps them progressing (`CoS → supervisor → worker`); orchestrates *actors*, doesn't touch code. Spawner (`bypassPermissions`).
 - **`worker.md`** — the leaf: does one job (or owns one repo end-to-end), doesn't spawn. Runs `auto`.
-- **`technical-manager.md`** — a hybrid lead: owns a repo **hands-on AND** supervises a team (does work *and* coordinates). Spawner (`bypassPermissions`).
+- **`technical-manager.md`** — a hybrid lead: owns a repo **hands-on AND** supervises a team (does work *and* orchestrates). Spawner (`bypassPermissions`).
 
 **Support + reference:**
 - **`first-run-interview.md`** — the one-time interview the CoS runs on a fresh network to set up the private repo.
@@ -46,6 +46,8 @@ to its own private repo.
 ## The bigger picture
 
 This repo is one piece of a network that also needs [smalltalk](https://github.com/myobie/smalltalk)
-(the file-based message bus + `st` CLI) and [pty](https://github.com/myobie/pty)
-(the session manager that runs each agent). Start from smalltalk's onboarding; point
-your CoS at these personas; run the first-run interview; go.
+(the file-based message bus + `st` CLI), [pty](https://github.com/myobie/pty)
+(the lean session primitive each agent runs in), and `convoy` (launch, orchestration,
+and hosting — `convoy cos` bootstraps a CoS; `convoy add` stands up an agent). Start
+from smalltalk's onboarding; point your CoS at these personas; run the first-run
+interview; go.
