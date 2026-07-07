@@ -4,6 +4,16 @@ Each agent's effective persona is **composed from layers**, so the public repo s
 
 **base (public, this repo)** + **specialization overlay(s) (public, this repo)** + **private overlay (the person's private `cos` repo)** → the **effective persona** the agent runs with.
 
+## The substrate — three tools, three distinct powers
+
+These personas run on a stack whose power comes from three tools that each do one thing well, and compose:
+
+- **smalltalk — the message bus (async + transparent state).** Agents talk by writing files to each other's inboxes, not by interrupting each other's chat — so an agent can *focus* on its work instead of context-switching on every ping. And because the whole network is a **folder**, state is externalized transparently: any agent (or human) can read the entire network's messages, status, and context directly. Message-passing over shared memory; a filesystem anyone can inspect.
+- **pty — hands on the keyboard (universal control).** Every agent runs in a pty session, so a supervisor can *always* see into and act on any agent directly — `peek` its terminal, `send` a direct instruction into its REPL (a direct terminal action, like a human at the keyboard: it unsticks, redirects, and even **authorizes** actions that relayed messages can't), `restart` a wedged one. This is what lets the network run *any* agent and do *anything* with it — no agent is ever stuck waiting on a human.
+- **convoy — the orchestrator (personas, proven, hosted).** convoy launches and hosts the whole network with **well-defined personas** (this repo), keeps every agent alive (respawn + a crash-loop cap), and anchors OS-level permissions so agents can act on real resources. The behavior is **proven by an eval suite**, not asserted — and sandboxing and more are on the roadmap.
+
+The combination is the point: **async transparent messaging + always-available direct control + proven hosted orchestration.** Focus without isolation; autonomy without abandonment; orchestration without a black box.
+
 ## The four bases
 
 Every agent is one of four:
