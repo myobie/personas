@@ -26,5 +26,11 @@ Standing engineering discipline. The point: **never end up in a state where so m
 - **Work on the existing branch; don't invent side branches.** To get commits onto a PR branch, check out *that* branch and put the commits there (cherry-pick if needed) — don't build parallel branches and try to graft them across.
 - **A plain push of your own checked-out tracking branch is normal; a cross-branch push into someone else's PR branch is not** — the latter reads as (and is) a dangerous shared-resource modification, and the permission system will block it, correctly.
 
+## 7. Manage context deliberately — don't ride into the dumb zone
+Agents degrade as their context fills; past roughly half-full, quality drops off (the "dumb zone"). Compact/reset **intentionally and often**, not only when the harness forces it.
+- **Workers + sub-tasks: fresh context per distinct piece.** Spin a subagent (or `/clear`) for each separable job rather than piling everything into one long-running context.
+- **Long-lived agents: externalize state to files continuously** — trackers, notes, memory — so a compaction or restart never loses what matters. If the state lives in a file, the context is disposable.
+- **Reset *before* the wedge, not after.** A supervisor watching an agent climb toward the dumb zone prompts a compaction/restart proactively; a context-saturation wedge is a failure to reset in time, not bad luck.
+
 ---
 *Origin (2026-07-02): an agent restructured a compose view (input-row wrapping + accessory-view edits), broke the app, and misattributed the failure to a "headless keyboard" environment limit. the principal caught it in minutes by driving the app by hand. These practices exist so that doesn't recur.* Pairs with [[evidence-only-no-flattery]] and the drive-to-done "done = the human can use it" bar.
