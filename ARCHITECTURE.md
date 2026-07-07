@@ -10,10 +10,12 @@ Every agent is one of four:
 
 - **`chief-of-staff`** — the single point of contact; triages, tracks, surfaces. Spawner → `bypassPermissions` + `--permanent`.
 - **`supervisor`** — spawns and drives a layer of workers; keeps them progressing; orchestrates *actors*, doesn't touch code. Spawner → `bypassPermissions` + `--permanent`.
-- **`worker`** — does the work (one task, or owns one repo end-to-end); doesn't spawn. Leaf → `auto`.
+- **`worker`** — does the work (one task, or owns one repo end-to-end); doesn't spawn. Leaf → `bypassPermissions` (for now; `auto`+sandboxes future).
 - **`technical-manager`** — a hybrid: owns a repo **hands-on AND** supervises a team whose repos build alongside it (does work *and* orchestrates). Spawner → `bypassPermissions` + `--permanent`.
 
 The hierarchy is `chief-of-staff → supervisor → worker`, with a technical-manager standing in for a supervisor when the lead should also be shipping code.
+
+**Permission posture (interim): every agent runs `bypassPermissions` for now.** Spawners (CoS, supervisor, technical-manager) *must* — the auto-mode classifier hard-blocks autonomous spawning, so a spawner in `auto` is inert. Workers *could* run `auto`, but its permission gating costs materially more tokens (re-prompts + classifier overhead), so for now they run bypass too. **Future work:** per-agent auto-mode gating, restored once **sandboxes** provide the isolation `auto` was buying — deferred now purely for token cost.
 
 ## Specialization overlays (public)
 

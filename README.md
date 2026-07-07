@@ -31,7 +31,7 @@ to its own private repo.
 **Four base roles** — every agent is one of these:
 - **`chief-of-staff.md`** — **start here.** The single point of contact: triage, track, surface. Spawner (`bypassPermissions`).
 - **`supervisor.md`** — the middle tier: spawns + drives workers, keeps them progressing (`CoS → supervisor → worker`); orchestrates *actors*, doesn't touch code. Spawner (`bypassPermissions`).
-- **`worker.md`** — the leaf: does one job (or owns one repo end-to-end), doesn't spawn. Runs `auto`.
+- **`worker.md`** — the leaf: does one job (or owns one repo end-to-end), doesn't spawn. Runs `bypassPermissions` for now (`auto`+sandboxes is future work).
 - **`technical-manager.md`** — a hybrid lead: owns a repo **hands-on AND** supervises a team (does work *and* orchestrates). Spawner (`bypassPermissions`).
 
 **Support + reference:**

@@ -79,8 +79,8 @@ Spawning is not free: each agent is a running context (token cost, a collaborati
 - **Do it inline (no new agent) when** it's a one-off you can finish yourself in a turn or two — a lookup, a quick edit in your own repo, a status check.
 
 Pick the **tier** by the shape of the work:
-- **worker** — bounded execution in one repo; doesn't orchestrate others. (`auto`.)
-- **standalone** — owns a repo end-to-end, no team. (`auto`.)
+- **worker** — bounded execution in one repo; doesn't orchestrate others. (`bypassPermissions` for now.)
+- **standalone** — owns a repo end-to-end, no team. (`bypassPermissions` for now.)
 - **supervisor** — orchestrates a slice of *actors* across multiple workers; doesn't touch code. (`bypassPermissions`.)
 - **technical-manager** — owns a repo **hands-on AND** leads a team whose repos build alongside it (does work *and* supervises). This is the common lead shape — someone who ships in the anchor repo, not just delegates — so reach for it, not a pure supervisor, whenever the lead should also be coding. (`bypassPermissions`.)
 
@@ -92,11 +92,11 @@ Standing up an agent is **not finished at `convoy add`.** The child comes up in 
 - Launch with `--unattended` so the gates auto-answer, then **verify the child actually booted** — status `available`, inbox draining. Don't trust the auto-poker blindly; harness frames go stale, and a child parked on a gate is a silent stall.
 - If a gate is stuck, answer it (`pty send <session> --seq key:return`). The agent isn't spawned until it's fully up and processing its inbox.
 
-**Permission tiers — spawners bypass, workers auto.** An agent that *spawns* other agents needs `bypassPermissions`; the auto-mode classifier hard-blocks autonomous spawning, so a spawner in `auto` is inert.
+**Permission tiers — everyone runs `bypassPermissions` for now.** Two things converge on bypass. Spawners *must* have it: the auto-mode classifier hard-blocks autonomous spawning, so a spawner in `auto` is inert. Workers *could* run `auto`, but its permission gating costs materially more tokens (re-prompts + classifier overhead), so for now they run bypass too — the isolation `auto` would buy is deferred to **sandboxes later** (future work).
 - **You (CoS)** and **supervisors** are spawners → launched with `--permission-mode bypassPermissions` (+ `--permanent`, since you persist).
-- **Workers** do the work and don't spawn → launched in **`auto`** (the safe leaf default). Don't hand a worker bypass.
+- **Workers** do the work and don't spawn, but still launch with `bypassPermissions` for now (see [worker](worker.md); `auto`+sandboxes is future work).
 
-So the hierarchy is **CoS → supervisor → worker**: you spawn supervisors (bypass), supervisors spawn workers (auto), and each spawner drives its child through the startup gates to a real boot.
+So the hierarchy is **CoS → supervisor → worker**: you spawn supervisors, supervisors spawn workers, everyone runs bypass for now, and each spawner drives its child through the startup gates to a real boot.
 
 ## Keep your shepherd cron armed — re-check on boot and after compaction
 
