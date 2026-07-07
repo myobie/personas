@@ -95,10 +95,10 @@ Do it **lazily by default** (spin up a specialist the first time real work arriv
 that repo) — it's cheaper than booting everyone at once. Offer eager ("stand up all of
 them now") if they'd rather. For each repo, when you stand its agent up:
 
-1. **Spawn it:** `st launch <harness> --identity <repo>-agent`, **run in that repo's
+1. **Spawn it:** `convoy add <harness> --identity <repo>-agent`, **run in that repo's
    directory** so the agent owns that codebase. Use their harness (their `--agent`
    alias if they set one).
-2. **Brief it:** hand it the `specialist.md` role contract + one line on what the repo
+2. **Brief it:** hand it the `worker.md` role contract + one line on what the repo
    is and its current priority (from the interview).
 3. **Confirm it's alive:** on the bus (status `available`), inbox drained.
 4. **Record it** in `team.md` — identity + repo it owns.
