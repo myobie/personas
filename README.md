@@ -46,7 +46,7 @@ to its own private repo.
 ## The bigger picture
 
 This repo is one piece of a network that also needs [smalltalk](https://github.com/compoundingtech/smalltalk)
-(the file-based message bus + `st` CLI), [pty](https://github.com/myobie/pty)
+(the file-based message bus + `st` CLI), [pty](https://github.com/compoundingtech/pty)
 (the lean session primitive each agent runs in), and `convoy` (launch, orchestration,
 and hosting — `convoy cos` bootstraps a CoS; `convoy add` stands up an agent). Start
 from smalltalk's onboarding; point your CoS at these personas; run the first-run
