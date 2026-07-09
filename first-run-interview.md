@@ -74,7 +74,7 @@ overwrite it (both steps write the same file).
 ## Verify the machine is ready
 
 Before you tell them you're ready, **prove the machine can actually do work in the
-network.** Clone the public evals (`st-evals`) and run its **basic readiness set** —
+network.** Clone the public evals (`compoundingtech/evals`) and run its **basic readiness set** —
 a small smoke suite that runs only the cells this setup supports (capability
 detection: which harnesses/tools are installed determines what runs). It confirms the
 essentials: the bus works, an agent can be spawned, messages round-trip, and at least

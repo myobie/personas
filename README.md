@@ -1,6 +1,6 @@
 # personas
 
-Generic **role contracts** for a Chief-of-Staff (CoS) + [smalltalk](https://github.com/myobie/smalltalk)
+Generic **role contracts** for a Chief-of-Staff (CoS) + [smalltalk](https://github.com/compoundingtech/smalltalk)
 agent network. These are the roles each agent plays — the mission, boundaries, and
 hard-won operating rules — with **zero personal or network-specific data**. A real
 network consumes this repo read-only, pinned to a SHA; everything private lives
@@ -45,7 +45,7 @@ to its own private repo.
 
 ## The bigger picture
 
-This repo is one piece of a network that also needs [smalltalk](https://github.com/myobie/smalltalk)
+This repo is one piece of a network that also needs [smalltalk](https://github.com/compoundingtech/smalltalk)
 (the file-based message bus + `st` CLI), [pty](https://github.com/myobie/pty)
 (the lean session primitive each agent runs in), and `convoy` (launch, orchestration,
 and hosting — `convoy cos` bootstraps a CoS; `convoy add` stands up an agent). Start
