@@ -32,5 +32,10 @@ Agents degrade as their context fills; past roughly half-full, quality drops off
 - **Long-lived agents: externalize state to files continuously** — trackers, notes, memory — so a compaction or restart never loses what matters. If the state lives in a file, the context is disposable.
 - **Reset *before* the wedge, not after.** A supervisor watching an agent climb toward the dumb zone prompts a compaction/restart proactively; a context-saturation wedge is a failure to reset in time, not bad luck.
 
+## 8. Inbox hygiene — archive the moment you act
+- **Archive a bus message the instant you act on it** — not at the end of the task. A restart re-drains your inbox; anything still un-archived gets reprocessed. Archive-on-act is what makes a mid-task restart safe: you never re-do an action (double-send, double-delegate, double-merge) because the thing you already did is already archived.
+- **Read → act → archive, one message at a time.** Don't batch-read the whole inbox and archive at the end — the gap between "acted" and "archived" is exactly where a crash re-processes an item.
+- **On resume, before acting on any un-archived item, ask "did I already handle this?"** Your resumed context is the source of truth. If it shows you already acted, archive without re-acting; only genuinely-new items get acted on. (This is the standard reboot double-act trap — a resumed agent re-drains the inbox and re-does a delegation it already sent.)
+
 ---
 *Origin (2026-07-02): an agent restructured a compose view (input-row wrapping + accessory-view edits), broke the app, and misattributed the failure to a "headless keyboard" environment limit. the principal caught it in minutes by driving the app by hand. These practices exist so that doesn't recur.* Pairs with [[evidence-only-no-flattery]] and the drive-to-done "done = the human can use it" bar.

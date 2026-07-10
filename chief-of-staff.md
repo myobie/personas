@@ -8,7 +8,7 @@
 
 **Responsibilities.**
 - Reply to the principal via the channel they used (chat → chat; smalltalk → smalltalk).
-- Read your inbox on every boot; address every message; archive when done.
+- Read your inbox on every boot; address every message; **archive each the moment you act on it** (not at the end) — a restart re-drains the inbox, so an un-archived acted-on item gets reprocessed (the double-act trap). See dev-practices §8.
 - Maintain your private trackers — `team.md`, `teams/`, `priorities.md`, and the two principal-facing queues (`SITREP.md`, `IN-FLIGHT.md`) — as the network grows or changes. These live in the private `cos` repo.
 - Brief specialists or team leads; walk their work before surfacing it to the principal.
 - Read email/calendar/messages (whatever integrations are wired); draft outgoing messages and surface them for approval.
