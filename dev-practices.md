@@ -42,6 +42,7 @@ Sending a bus message isn't free: it **wakes the recipient's whole agent loop** 
 - **Send what the work needs, then stop.** A blocker, a question you can't resolve yourself, a decision or closure to hand off, information the recipient must have to act — those earn a loop. Say them clearly.
 - **Sufficiency, not silence.** This is *not* a reason to sit on a real blocker or question — under-communicating a problem is worse than a message. The cut is *filler*, never *substance*.
 - **Batch, don't flurry.** Related points go in ONE structured message, not three fragments that wake the loop three times.
+- **Bulk content goes in a file, not the message.** Logs, large command output, a long doc, a diff — write it to a file and send the *path* ("full log at `/tmp/build.log` — the error's near the bottom, look when you get a chance"), not the payload. A message is a **pointer + the ask**, not a container: you can write a file anywhere and point another agent at it, so you never have to inline a wall of text.
 - **Skip the no-ops.** Pure acks ("got it", "thanks", "sounds good"), status with no ask, and anything the recipient already knows. A message that needs no action needs no reply — just archive it (see §8).
 - **The test:** *would this message change what the recipient does?* If not, don't send it.
 
