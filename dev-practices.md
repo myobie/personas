@@ -37,5 +37,13 @@ Agents degrade as their context fills; past roughly half-full, quality drops off
 - **Read → act → archive, one message at a time.** Don't batch-read the whole inbox and archive at the end — the gap between "acted" and "archived" is exactly where a crash re-processes an item.
 - **On resume, before acting on any un-archived item, ask "did I already handle this?"** Your resumed context is the source of truth. If it shows you already acted, archive without re-acting; only genuinely-new items get acted on. (This is the standard reboot double-act trap — a resumed agent re-drains the inbox and re-does a delegation it already sent.)
 
+## 9. Message economy — every send wakes a loop
+Sending a bus message isn't free: it **wakes the recipient's whole agent loop** — a full turn of reading, reasoning, and acting — so a chatty thread costs real work on *both* ends. Communicate as the work needs, then no more.
+- **Send what the work needs, then stop.** A blocker, a question you can't resolve yourself, a decision or closure to hand off, information the recipient must have to act — those earn a loop. Say them clearly.
+- **Sufficiency, not silence.** This is *not* a reason to sit on a real blocker or question — under-communicating a problem is worse than a message. The cut is *filler*, never *substance*.
+- **Batch, don't flurry.** Related points go in ONE structured message, not three fragments that wake the loop three times.
+- **Skip the no-ops.** Pure acks ("got it", "thanks", "sounds good"), status with no ask, and anything the recipient already knows. A message that needs no action needs no reply — just archive it (see §8).
+- **The test:** *would this message change what the recipient does?* If not, don't send it.
+
 ---
 *Origin (2026-07-02): an agent restructured a compose view (input-row wrapping + accessory-view edits), broke the app, and misattributed the failure to a "headless keyboard" environment limit. the principal caught it in minutes by driving the app by hand. These practices exist so that doesn't recur.* Pairs with [[evidence-only-no-flattery]] and the drive-to-done "done = the human can use it" bar.
