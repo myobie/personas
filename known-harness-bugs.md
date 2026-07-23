@@ -36,3 +36,11 @@ Entry format: symptom → diagnosis → recovery/workaround → status.
 - **Symptom:** a GLM-backed agent launched via an ollama-routed path hits Bash approval gates and stalls, because that path controls the harness argv and doesn't pass `--permission-mode auto` through.
 - **Recovery/workaround:** approve the gate manually (poke), or pre-seed permission settings in the folder's `.claude` config.
 - **Status:** open (launcher gap, ollama path only). Niche — affects GLM-via-ollama launches, not the default path.
+
+---
+
+## "Terminal active" is meaningless in a pty — never infer the principal is present from it
+- **Symptom:** the PushNotification / desktop-notify tool reports the terminal as ACTIVE ("this terminal is active, so your output already reaches the user; a notification would be redundant — not sent"), and an agent reads that as "the principal is here right now" — then addresses them as present, or suppresses a push they actually needed. But the principal is NOT necessarily there.
+- **Diagnosis:** every agent runs inside a **pty**. The pty's terminal is always live (it is the agent's own session), so any "is the user at the terminal?" presence check is fooled 100% of the time — it returns "active" whether or not a human is watching. The signal describes the pty, not the principal's presence.
+- **Recovery/workaround:** never infer the principal's presence from a terminal-active / "not-sent-because-active" signal. Decide whether to push or surface on whether you NEED them, not on a presence guess (err toward pushing when you need them). A push's "not sent / suppressed" response is unreliable — fire when you need them, and don't re-fire assuming it failed. Automated (cron / periodic-sweep) output is a status note, not a live conversation — do NOT greet or address the principal as if they just arrived; wait for an actual human turn.
+- **Status:** inherent to running in a pty — not fixable; a standing rule for every agent.
