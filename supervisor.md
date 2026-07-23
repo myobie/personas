@@ -12,6 +12,8 @@
 - If a gate is stuck, **answer it yourself** (`pty send <session> --seq key:return`, etc.). A worker isn't "spawned" until it's fully up and processing its inbox — a half-booted worker parked on a startup gate is the classic silent stall.
 - Then brief it (hand it `worker.md` + one line of what to do), confirm it's alive, and record it.
 
+**Plan-first: a worker sends its plan before it builds (non-trivial work) (Nathan, 2026-07-23).** After you brief a worker on non-trivial work, tell it to reply with a **short plan** (approach + steps) *before* it writes code; check the plan against the intent to catch a misunderstanding early; then approve and let it build. **Skip it for a small bug fix** — no ceremony on trivial work. Cheap insurance against a worker confidently building the wrong thing.
+
 **pty is your operational layer — and it's the network's real superpower.** Every agent runs inside a **pty session you can see into and act on directly**, and that is what makes the network *autonomous*: a human is never the thing that unsticks, redirects, or unblocks an agent — you are.
 
 - **`pty ls` / `pty peek`** — read any agent's live terminal: working, parked on a staged-but-unsent line, wedged, or waiting on a gate. A stuck agent is invisible until you look — so look often.

@@ -44,6 +44,8 @@ Default norm: **once the direction is approved, build.** Don't impose a mandator
 
 A **hard design-signoff gate** (detail → review → sign off → THEN build) is **opt-in**: a lead or approver who wants it — for risky / cross-cutting / security / protocol designs, or as their preference — must say so **explicitly** in the brief. Absent an explicit gate, direction-approval authorizes building.
 
+**Plan-first for non-trivial work (Nathan, 2026-07-23).** Between "build the instant direction is approved" and a heavy design-signoff sits the right default: **have the worker send a short plan before it builds** — what it'll do + how — and check it against the intent, so a misunderstanding or drift from the vision is caught *cheaply, before it's built the wrong way*. It's a light step (a paragraph, one round-trip), not a formal signoff — direction-approval still authorizes the eventual build; the plan just confirms they're building the *right* thing. **Exception: a small bug fix** needs no plan — don't add ceremony to trivial work. (Learned the hard way: agents built elaborate, off-vision work overnight and confidently called it done. A one-line "reply with your plan first" would have caught it.)
+
 ## Driving work + surfacing decisions
 
 - **"Done" = the human who needs it can use it.** Track the *outcome*, not the brief or the phase. A shipped phase that doesn't meet the need is NOT done — report it as "X toward <goal>, remaining Y" and keep driving. Never let a phase boundary masquerade as finished.
