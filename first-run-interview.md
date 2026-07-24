@@ -1,9 +1,9 @@
 # First-run interview
 
-The CoS runs this **once**, the first time it boots into a fresh network with no
-populated private `cos` repo. Its job: gather the private information a CoS needs
-to be useful — none of which lives in the public repos — and write it into a new
-private `cos` repo that the person owns.
+The CoS runs this **once per human**, the first time it boots into a fresh network
+with no populated private `cos` repo. Its job: gather the private information one
+human's CoS needs to be useful — none of which lives in the public repos — and
+write it into a new private `cos` repo that the person owns.
 
 ## When it runs
 
@@ -55,7 +55,8 @@ repo (`git init` if it isn't one already). This repo holds everything private
 
 **4. Who else is around?**
 - Other people (collaborators) or other agents already running.
-- For collaborators: name + how they fit. For agents: name + what they own.
+- For collaborators: name + how they fit. For agents: name + what they own, their
+  declared machine/root, and which CoS relationships should receive incidents.
 → **merges** into `team.md` — append people/agents to the Step-2 project roster; never
 overwrite it (both steps write the same file).
 
@@ -63,6 +64,8 @@ overwrite it (both steps write the same file).
 - Which real-world channels to sweep, if any: email, calendar, messages,
   reminders. Only the ones they've wired up + want watched. (Multi-select form.)
 - Quiet hours (default: overnight in their timezone — no non-urgent pushes).
+- Which real network/runtime scheduler supplies periodic CoS reviews. DING wakes
+  inbox handling; it is not a scheduler and the CoS must not poll the inbox.
 → writes the sweep config into `sweeps.md` (the one canonical location).
 
 **6. How do you like to be kept in the loop?**
@@ -73,17 +76,25 @@ overwrite it (both steps write the same file).
 
 ## Verify the machine is ready
 
-Before you tell them you're ready, **prove the machine can actually do work in the
-network.** Clone the public evals (`compoundingtech/evals`) and run its **basic readiness set** —
-a small smoke suite that runs only the cells this setup supports (capability
-detection: which harnesses/tools are installed determines what runs). It confirms the
-essentials: the bus works, an agent can be spawned, messages round-trip, and at least
-one installed harness can complete a real task.
+Before you tell them you're ready, **prove each machine their agents will use can
+actually do work in the network.** For every participating machine:
+
+1. Verify st2/catalog declares exactly one root and the live topology has exactly
+   one healthy root. A missing or duplicate root is a setup error reported by the
+   root/control plane; do not make the CoS silently absorb root duties.
+2. Have that root verify the host st2 reconciler/service, the fabric paths its
+   declared agents require, and a real persistent wake for scheduled health
+   sweeps.
+3. Clone the public evals (`compoundingtech/evals`) and run its **basic readiness
+   set** on the machine. Capability detection determines which installed
+   harnesses/tools run. It confirms the bus works, declared agents reconcile,
+   messages round-trip, and at least one installed harness can complete a real
+   task.
 
 - **Report the result plainly:** ready to go, or here's what's missing (e.g. "Codex
   isn't installed, so those cells are skipped" / "the bus smoke failed — here's the fix").
 - Don't block setup on optional gaps — surface them. Block only on the essentials
-  (can't spawn / can't message = not ready).
+  (no unique healthy root / can't reconcile / can't message = not ready).
 
 ## Stand up the team
 
@@ -91,17 +102,21 @@ The interview captured the person's repos (Step 2). **A CoS with no specialists 
 accomplish anything** — so stand up a briefed specialist per repo. This is the step
 that turns "I set up a chief of staff" into "I have a team that gets work done."
 
-Do it **lazily by default** (spin up a specialist the first time real work arrives for
-that repo) — it's cheaper than booting everyone at once. Offer eager ("stand up all of
-them now") if they'd rather. For each repo, when you stand its agent up:
+Do it **lazily by default** (declare a specialist the first time real work arrives
+for that repo) — it's cheaper than running everyone at once. Offer eager ("stand
+up all of them now") if they'd rather. For each repo:
 
-1. **Spawn it:** `convoy add <harness> --identity <repo>-agent`, **run in that repo's
-   directory** so the agent owns that codebase. Use their harness (their `--agent`
-   alias if they set one).
-2. **Brief it:** hand it the `worker.md` role contract + one line on what the repo
-   is and its current priority (from the interview).
-3. **Confirm it's alive:** on the bus (status `available`), inbox drained.
-4. **Record it** in `team.md` — identity + repo it owns.
+1. **Declare it:** add one repo-owning agent to st2/catalog with its role, repo
+   working directory, target machine, and all relevant CoS relationships. Do not
+   create a second owner for the same repo.
+2. **Reconcile it:** ask the target machine root to converge the declaration to a
+   healthy runtime. Root owns service/startup/PTY recovery and confirms
+   `available` with the inbox draining.
+3. **Brief it directly:** send the worker role contract plus one line on the repo
+   and current priority. Work content may go straight from CoS to repo owner; root
+   is not a work relay.
+4. **Record it** in `team.md` — identity, repo, machine/root, and declared CoS
+   relationships.
 
 Now you have someone to delegate to. When the person asks for work on a repo, you brief
 its specialist (standing it up first if it isn't running), walk the result, and surface.
@@ -112,7 +127,7 @@ its specialist (standing it up first if it isn't running), walk the result, and 
    interview: initial CoS setup").
 2. Give a one-screen summary of what you captured and confirm it's right (a form:
    "looks good / let me fix something").
-3. Set your status `available` and tell them you're ready — and that they can
+3. Set your st2 status `available` and tell them you're ready — and that they can
    change any of this later by just telling you (you own these files).
 
 After this, every boot reads the private repo and skips straight to normal

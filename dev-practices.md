@@ -30,9 +30,15 @@ Standing engineering discipline. The point: **never end up in a state where so m
 Agents degrade as their context fills; past roughly half-full, quality drops off (the "dumb zone"). Compact/reset **intentionally and often**, not only when the harness forces it.
 - **Workers + sub-tasks: fresh context per distinct piece.** Spin a subagent (or `/clear`) for each separable job rather than piling everything into one long-running context.
 - **Long-lived agents: externalize state to files continuously** — trackers, notes, memory — so a compaction or restart never loses what matters. If the state lives in a file, the context is disposable.
-- **Reset *before* the wedge, not after.** A supervisor watching an agent climb toward the dumb zone prompts a compaction/restart proactively; a context-saturation wedge is a failure to reset in time, not bad luck.
+- **Reset *before* the wedge, not after.** The machine root watches runtime
+  saturation and prompts or recovers a compaction/restart; the work lead preserves
+  enough durable task state to resume. A context-saturation wedge is a failure to
+  reset in time, not bad luck.
 
 ## 8. Inbox hygiene — archive the moment you act
+- **Drain on events, not a polling loop.** Drain the bus inbox on cold boot and
+  each DING. DING is message-arrival notification; periodic shepherd/health
+  sweeps inspect live work and trackers, not the message inbox.
 - **Archive a bus message the instant you act on it** — not at the end of the task. A restart re-drains your inbox; anything still un-archived gets reprocessed. Archive-on-act is what makes a mid-task restart safe: you never re-do an action (double-send, double-delegate, double-merge) because the thing you already did is already archived.
 - **Read → act → archive, one message at a time.** Don't batch-read the whole inbox and archive at the end — the gap between "acted" and "archived" is exactly where a crash re-processes an item.
 - **On resume, before acting on any un-archived item, ask "did I already handle this?"** Your resumed context is the source of truth. If it shows you already acted, archive without re-acting; only genuinely-new items get acted on. (This is the standard reboot double-act trap — a resumed agent re-drains the inbox and re-does a delegation it already sent.)
@@ -42,7 +48,7 @@ Sending a bus message isn't free: it **wakes the recipient's whole agent loop** 
 - **Send what the work needs, then stop.** A blocker, a question you can't resolve yourself, a decision or closure to hand off, information the recipient must have to act — those earn a loop. Say them clearly.
 - **Sufficiency, not silence.** This is *not* a reason to sit on a real blocker or question — under-communicating a problem is worse than a message. The cut is *filler*, never *substance*.
 - **Batch, don't flurry.** Related points go in ONE structured message, not three fragments that wake the loop three times.
-- **Bulk content goes in a file, not the message.** Logs, large command output, a long doc, a diff — write it to a file and send the *path* ("full log at `/tmp/build.log` — the error's near the bottom, look when you get a chance"), not the payload. A message is a **pointer + the ask**, not a container: you can write a file anywhere and point another agent at it, so you never have to inline a wall of text.
+- **Bulk content goes in a file, not the message.** Logs, large command output, a long doc, a diff — write it to a file and send the *path* ("full log at `artifacts/build.log` — the error's near the bottom, look when you get a chance"), not the payload. A message is a **pointer + the ask**, not a container: you can write a file anywhere and point another agent at it, so you never have to inline a wall of text.
 - **Skip the no-ops.** Pure acks ("got it", "thanks", "sounds good"), status with no ask, and anything the recipient already knows. A message that needs no action needs no reply — just archive it (see §8).
 - **The test:** *would this message change what the recipient does?* If not, don't send it.
 
