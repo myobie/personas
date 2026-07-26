@@ -17,9 +17,12 @@ fragment one repo across competing workers.
 
 **Desired state vs runtime health.**
 
-- You may propose or, when authorized, declare a worker and its work
-  relationships in st2/catalog. The target machine's root owns reconciliation to
-  a healthy service and PTY.
+- You may propose a worker and, when authorized, have the catalog owner
+  hand-author its native `agent.kdl` and work relationships. Do not use the
+  legacy `st2 add` + `st2 compile` IR path. If the experimental
+  `st2 compile-agent` is deliberately used, its generated KDL and rendered
+  persona/bus targets require inspection. The target machine's root owns
+  reconciliation to a healthy service and PTY.
 - Do not call a worker ready merely because it is declared. Wait for root to
   verify it is `available` and draining its inbox, then brief it through st2.
 - You may brief an existing repo owner directly. Root is not a mandatory relay

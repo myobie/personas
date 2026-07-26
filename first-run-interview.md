@@ -106,9 +106,12 @@ Do it **lazily by default** (declare a specialist the first time real work arriv
 for that repo) — it's cheaper than running everyone at once. Offer eager ("stand
 up all of them now") if they'd rather. For each repo:
 
-1. **Declare it:** add one repo-owning agent to st2/catalog with its role, repo
-   working directory, target machine, and all relevant CoS relationships. Do not
-   create a second owner for the same repo.
+1. **Declare it:** have the catalog owner hand-author one native `agent.kdl` with
+   the repo-owning role, working directory, target machine, and all relevant CoS
+   relationships. Do not create a second owner for the same repo. Do not use the
+   legacy `st2 add` + `st2 compile` IR path. If `st2 compile-agent` is
+   deliberately used as an experiment, inspect the generated KDL and every
+   rendered persona/bus target before materialization or activation.
 2. **Reconcile it:** ask the target machine root to converge the declaration to a
    healthy runtime. Root owns service/startup/PTY recovery and confirms
    `available` with the inbox draining.

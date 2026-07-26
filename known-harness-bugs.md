@@ -26,8 +26,9 @@ Entry format: symptom → diagnosis → recovery/workaround → status.
 - **Was (non-ding / MCP-only path):** a message delivered to a healthy, low-context, **idle** agent's inbox sometimes didn't re-trigger its loop — the file-watch layer (FSEvents/chokidar) could drop the underlying `add` event so the channel notification never surfaced. A bare Enter didn't wake it; a pty poke did.
 - **Solved by DING:** the **DING sidecar supplies message-arrival events** — it
   wakes an idle agent on arrival with zero keystrokes, closing the FSEvents gap.
-  Agents drain on cold boot and DING; they do not periodically poll the inbox.
-  **On a DING-based network this is not a live bug.**
+  Agents match the stable `[DING]` prefix and `[id:<rand6>]`, not the complete
+  sentence, then drain on cold boot/new ids without periodically polling the
+  inbox. **On a DING-based network this is not a live bug.**
 - **Status:** resolved for ding agents. Only the legacy non-ding path had the gap — and the network is moving ding-only, so this retires with it.
 
 ---

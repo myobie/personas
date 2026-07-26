@@ -79,9 +79,11 @@ direction.
 
 ### Event delivery is not scheduling
 
-DING is a message-arrival event: agents drain their st2 inbox on cold boot and
-each ding, archiving every message as soon as they act. They do not periodically
-poll the inbox.
+DING is a message-arrival event. Match the stable `[DING]` prefix and
+`[id:<rand6>]`, never the complete human-readable sentence; wording may differ
+across a rolling binary window. Agents drain their st2 inbox on cold boot and for
+each new id, archiving every message as soon as they act. They deduplicate by id
+and do not periodically poll the inbox.
 
 Scheduled sweeps inspect live state and trackers, not message arrival. A root's
 persistent health wake is supplied by the host st2 reconciler. A CoS's periodic
@@ -118,6 +120,13 @@ composes base → specialization → private overlay → the effective `PERSONA.
 Sketch: a catalog entry typed as `<base>:<specialization>` resolves to the base,
 the matching public overlay when present, and applicable private overlays.
 Host-specific launch flags remain outside this public contract.
+
+### Native catalog source
+
+The canonical source for an agent is its hand-authored native `agent.kdl`. Do not
+use the legacy `st2 add` + `st2 compile` IR pipeline. `st2 compile-agent` remains
+experimental: when deliberately used, its generated KDL and all rendered
+persona/bus targets must be inspected before materialization or activation.
 
 ## Shared reference (imported, not composed)
 

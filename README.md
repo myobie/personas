@@ -61,6 +61,8 @@ behave, your private tooling). This public repo holds only generic contracts —
 This repo is one piece of a network that also needs st2 (catalog, reconciliation,
 message bus, and shared agent state), [pty](https://github.com/compoundingtech/pty)
 (the harness-neutral session primitive), and the configured fabric between
-machines. Declare the human/CoS, machine/root, agent/repo-owner, and agent/CoS
-relationships in st2; point each role at these personas; then run the first-run
-interview for each human.
+machines. Hand-author native `agent.kdl` declarations for the human/CoS,
+machine/root, agent/repo-owner, and agent/CoS relationships; point each role at
+these personas; then run the first-run interview for each human. The legacy
+`st2 add` + `st2 compile` path is not canonical; `st2 compile-agent` is
+experimental and its generated KDL/rendered targets require inspection.

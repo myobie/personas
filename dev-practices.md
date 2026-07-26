@@ -37,8 +37,10 @@ Agents degrade as their context fills; past roughly half-full, quality drops off
 
 ## 8. Inbox hygiene — archive the moment you act
 - **Drain on events, not a polling loop.** Drain the bus inbox on cold boot and
-  each DING. DING is message-arrival notification; periodic shepherd/health
-  sweeps inspect live work and trackers, not the message inbox.
+  each new DING id. Match the stable `[DING]` prefix and `[id:<rand6>]`, not the
+  complete human-readable sentence; deduplicate re-pokes by id. DING is
+  message-arrival notification; periodic shepherd/health sweeps inspect live work
+  and trackers, not the message inbox.
 - **Archive a bus message the instant you act on it** — not at the end of the task. A restart re-drains your inbox; anything still un-archived gets reprocessed. Archive-on-act is what makes a mid-task restart safe: you never re-do an action (double-send, double-delegate, double-merge) because the thing you already did is already archived.
 - **Read → act → archive, one message at a time.** Don't batch-read the whole inbox and archive at the end — the gap between "acted" and "archived" is exactly where a crash re-processes an item.
 - **On resume, before acting on any un-archived item, ask "did I already handle this?"** Your resumed context is the source of truth. If it shows you already acted, archive without re-acting; only genuinely-new items get acted on. (This is the standard reboot double-act trap — a resumed agent re-drains the inbox and re-does a delegation it already sent.)
