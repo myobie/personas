@@ -22,14 +22,27 @@ Entry format: symptom → diagnosis → recovery/workaround → status.
 
 ---
 
-## Idle-agent delivery-wake — solved by ding
-- **Was (non-ding / MCP-only path):** a message delivered to a healthy, low-context, **idle** agent's inbox sometimes didn't re-trigger its loop — the file-watch layer (FSEvents/chokidar) could drop the underlying `add` event so the channel notification never surfaced. A bare Enter didn't wake it; a pty poke did.
-- **Solved by DING:** the **DING sidecar supplies message-arrival events** — it
-  wakes an idle agent on arrival with zero keystrokes, closing the FSEvents gap.
-  Agents match the stable `[DING]` prefix and `[id:<rand6>]`, not the complete
-  sentence, then drain on cold boot/new ids without periodically polling the
-  inbox. **On a DING-based network this is not a live bug.**
-- **Status:** resolved for ding agents. Only the legacy non-ding path had the gap — and the network is moving ding-only, so this retires with it.
+## Idle-agent delivery-wake — arrival solved; turn wake remains open
+- **Was (non-ding / MCP-only path):** a message delivered to a healthy,
+  low-context, **idle** agent's inbox sometimes didn't re-trigger its loop — the
+  file-watch layer (FSEvents/chokidar) could drop the underlying `add` event so
+  the channel notification never surfaced. A bare Enter didn't wake it; a pty
+  poke did.
+- **Solved by DING:** the **DING sidecar supplies message-arrival events**,
+  closing the FSEvents arrival gap. Agents match the stable `[DING]` prefix and
+  `[id:<rand6>]`, not the complete sentence, then drain on cold boot/new ids.
+- **Still open:** DING arrival does not guarantee Codex turn submission or wake.
+  In a live 2026-07-26 case, the sidecar observed arrival and staged the notice,
+  but Codex displayed the idle "Create a plan?" choice. The modal-safe gate
+  correctly withheld Return, so the notice remained staged indefinitely and the
+  agent did not start a turn.
+- **Recovery/workaround:** use bounded pty diagnosis/recovery when a staged DING
+  does not wake the turn. Low-frequency inbox polling by the Remote CoS is a
+  temporary, principal-authorized exception pending an evented st2 fix; agents
+  should not add routine inbox polling. Do not weaken the active-human/modal
+  safety gate to force submission.
+- **Status:** open for guaranteed turn submission/wake; resolved only for
+  file-watch arrival.
 
 ---
 
