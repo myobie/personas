@@ -35,7 +35,18 @@ Agents degrade as their context fills; past roughly half-full, quality drops off
   enough durable task state to resume. A context-saturation wedge is a failure to
   reset in time, not bad luck.
 
-## 8. Inbox hygiene — archive the moment you act
+## 8. st2 lifecycle — status and inbox hygiene
+- **Declare `busy` before active work.** Unless an explicit `dnd` hold is active,
+  start every unit of work — a direct turn, cold-boot backlog, scheduled review,
+  or new DING — by immediately running
+  `st2 status "$ST_AGENT" --set busy`. Remain `busy` through inbox handling,
+  execution, verification, and reporting.
+- **Declare `available` only when yielding.** Set `available` after active work
+  is complete and you are about to yield or stand by for the next event. Never
+  work or drain an inbox while advertising `available`: DING relies on `busy`
+  and `dnd` to defer new arrivals. `dnd` is an explicit hold, such as direct
+  human piloting, not the status for ordinary work; keep it until that hold ends
+  instead of overwriting it with `busy` or `available`.
 - **Drain on events, not a polling loop.** Drain the bus inbox on cold boot and
   each new DING id. Match the stable `[DING]` prefix and `[id:<rand6>]`, not the
   complete human-readable sentence; deduplicate re-pokes by id. DING is

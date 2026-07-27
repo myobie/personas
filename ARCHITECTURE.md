@@ -85,6 +85,12 @@ across a rolling binary window. Agents drain their st2 inbox on cold boot and fo
 each new id, archiving every message as soon as they act. They deduplicate by id
 and do not periodically poll the inbox.
 
+Agent-declared status is DING's delivery gate. Every role sets `busy` before
+active work and remains `busy` through reporting; it sets `available` only when
+yielding or standing by. An explicit `dnd` hold takes precedence until the hold
+ends. DING defers arrivals while an agent is `busy` or `dnd` and flushes them
+after the agent returns to `available`.
+
 Scheduled sweeps inspect live state and trackers, not message arrival. A root's
 persistent health wake is supplied by the host st2 reconciler. A CoS's periodic
 work/tracker review requires a real scheduler supplied by its network/runtime.

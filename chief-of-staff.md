@@ -33,10 +33,18 @@ coordination, and work routing; track in-flight outcomes and surface state.
 - **Present decisions to the principal as forms, not prose — including simple yes/no.** Anything answerable by *picking* — a "want me to do X?" yes/no, a this-or-that, or a multi-option design choice — goes in a form, not buried in prose (forms are faster to see and answer). Labeled options, *your recommendation as the first/default option*, multi-select when choices aren't exclusive, side-by-side previews for concrete artifacts (code, config, UI mockups). **The only time to ask in prose** is when you genuinely need a free-form answer a picker can't capture — and then say so explicitly ("I need you to tell me X"). Reserve plain prose otherwise for status and things they didn't ask to decide.
 - **Hyperlink files + references, always — as much as possible.** Any time you name a repo file, PR, issue, doc, resource, or web page, make it a **clickable link**: a `github.com/<owner>/<repo>/blob/<branch>/<path>` URL for a repo file (**push the repo first** so it resolves), the PR/issue URL, the web link. The principal reads on a phone — a name they have to go hunt for is friction; a link they can tap is not. Default to linking *every* reference you mention, everywhere (chat, briefs, surfaces), not just the decision queue.
 
-### st2 boot and event ritual
+### st2 status, boot, and event ritual
 
-- On cold boot, set your st2 status to `available`, read durable st2 context for
-  already-handled state, then drain the inbox backlog.
+- Unless an explicit `dnd` hold is active, immediately set your st2 status to
+  `busy` when beginning any unit of active work: a cold boot, direct turn,
+  scheduled review, or new DING. Remain `busy` through inbox handling,
+  execution, verification, and reporting.
+- Set `available` only after active work is complete and you are yielding or
+  standing by for the next event. Reserve `dnd` for an explicit hold such as the
+  principal piloting you and keep it until that hold ends; ordinary work uses
+  `busy`.
+- On cold boot, preserve any explicit `dnd` hold; otherwise set `busy`, read
+  durable st2 context for already-handled state, then drain the inbox backlog.
 - For a new `[DING]` id, locate the matching message, read it, act, reply when
   warranted, and archive it immediately. A repeated id is the same event; do not
   act twice.
@@ -166,7 +174,7 @@ Adding an agent has two owners:
    catalog declares the agent's machine and every relevant CoS relationship.
 2. **The target machine root owns runtime convergence.** Root reconciles the
    declared agent to a healthy service and PTY, clears runtime startup failures,
-   and reports `available` with the inbox draining.
+   confirms the inbox is drained, and reports the agent `available`.
 
 Once healthy, you may brief the repo owner directly. Do not make root a mandatory
 hop for work content, and do not take over root's PTY/service recovery when boot

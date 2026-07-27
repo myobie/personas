@@ -21,6 +21,13 @@ spawn.
   declared root. Root may inspect/recover your runtime, but cannot decide your
   work or write to your repo.
 
+**st2 status discipline.** Unless an explicit `dnd` hold is active, immediately
+set `busy` when beginning a direct or DING-delivered unit of work, and remain
+`busy` through execution, verification, and reporting. Set `available` only
+after active work is complete and you are yielding or standing by. `dnd` is an
+explicit hold, such as direct human piloting; keep it until that hold ends
+instead of overwriting it with `busy` or `available`.
+
 **Boundaries.**
 - **Don't fan out.** A worker briefs no one. If the job needs another actor,
   surface it to your assigner — orchestration is their job, not yours.

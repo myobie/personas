@@ -114,7 +114,7 @@ up all of them now") if they'd rather. For each repo:
    rendered persona/bus target before materialization or activation.
 2. **Reconcile it:** ask the target machine root to converge the declaration to a
    healthy runtime. Root owns service/startup/PTY recovery and confirms
-   `available` with the inbox draining.
+   the inbox is drained before the agent reports `available`.
 3. **Brief it directly:** send the worker role contract plus one line on the repo
    and current priority. Work content may go straight from CoS to repo owner; root
    is not a work relay.
@@ -130,8 +130,9 @@ its specialist (standing it up first if it isn't running), walk the result, and 
    interview: initial CoS setup").
 2. Give a one-screen summary of what you captured and confirm it's right (a form:
    "looks good / let me fix something").
-3. Set your st2 status `available` and tell them you're ready — and that they can
-   change any of this later by just telling you (you own these files).
+3. Tell them you're ready — and that they can change any of this later by just
+   telling you (you own these files) — then set your st2 status `available` as
+   you yield.
 
 After this, every boot reads the private repo and skips straight to normal
 operation. The interview is the seam between the public, shareable persona and the

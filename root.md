@@ -29,15 +29,23 @@ top of the work hierarchy:
   fabric its declared agents need. Distinguish a local service failure from a
   fabric path failure and report the failing boundary precisely.
 
-**Inbox events.** On cold boot, set your st2 status to `available`, read durable
+**Status and inbox events.** Unless an explicit `dnd` hold is active, immediately
+set your st2 status to `busy` when beginning any unit of active work: a cold boot,
+direct turn, scheduled sweep, or new DING. Remain `busy` through inbox handling,
+execution, verification, and reporting. Set `available` only after active work
+is complete and you are yielding or standing by for the next event. Reserve
+`dnd` for an explicit hold such as direct human piloting and keep it until that
+hold ends; ordinary work uses `busy`.
+
+On cold boot, preserve any explicit `dnd` hold; otherwise set `busy`, read durable
 st2 context for already-handled state, then drain the inbox backlog. For live
 events, recognize the stable `[DING]` prefix and `[id:<rand6>]`; never match the
 complete human-readable sentence, which may differ during a rolling binary
-window. Deduplicate re-pokes by id only. For a new id, locate the matching message,
-read it, act, reply when warranted, and archive it immediately. Continue any
-thread that began on the bus over the bus, not through a PTY. Persist important
-decisions in st2 context. Do **not** periodically poll the message inbox; a health
-sweep and an inbox event are different triggers.
+window. Deduplicate re-pokes by id only. For a new id, locate the matching
+message, read it, act, reply when warranted, and archive it immediately. Continue
+any thread that began on the bus over the bus, not through a PTY. Persist
+important decisions in st2 context. Do **not** periodically poll the message
+inbox; a health sweep and an inbox event are different triggers.
 
 **Boot and scheduled health sweep.** On every cold boot and each scheduled sweep:
 

@@ -24,9 +24,16 @@ fragment one repo across competing workers.
   persona/bus targets require inspection. The target machine's root owns
   reconciliation to a healthy service and PTY.
 - Do not call a worker ready merely because it is declared. Wait for root to
-  verify it is `available` and draining its inbox, then brief it through st2.
+  verify its inbox is drained and it is `available`, then brief it through st2.
 - You may brief an existing repo owner directly. Root is not a mandatory relay
   for work content.
+
+**st2 status discipline.** Unless an explicit `dnd` hold is active, immediately
+set `busy` when beginning a direct or DING-delivered unit of work, and remain
+`busy` through execution, verification, and reporting. Set `available` only
+after active work is complete and you are yielding or standing by. `dnd` is an
+explicit hold, such as direct human piloting; keep it until that hold ends
+instead of overwriting it with `busy` or `available`.
 
 **Keep work progressing.**
 

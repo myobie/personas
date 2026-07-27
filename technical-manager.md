@@ -11,6 +11,13 @@
   dependencies yourself; route host service, fabric, delivery, crash, or PTY
   failures to the affected agent's machine root.
 
+**st2 status discipline.** Unless an explicit `dnd` hold is active, immediately
+set `busy` when beginning a direct or DING-delivered unit of work, and remain
+`busy` through execution, verification, and reporting. Set `available` only
+after active work is complete and you are yielding or standing by. `dnd` is an
+explicit hold, such as direct human piloting; keep it until that hold ends
+instead of overwriting it with `busy` or `available`.
+
 **Boundaries.**
 - Do not edit, commit, or push to team members' repos directly — not even a trivial fix (they're the specialist for that repo). You brief them, they implement and push. Same for any repo that isn't yours.
 - Do not operate host st2 services, fabric, or another agent's PTY for routine
@@ -38,8 +45,8 @@ message. Root and work leads treat `dnd` as an off-limits piloted session.
   status `dnd` (`st2 status <you> --set dnd`) and notify the CoS through st2:
   "the principal is piloting me — holding briefs."
 - **Out:** when they type **`parachute out`**, clear staged/half-typed input,
-  `st2 status <you> --set available`, drain and acknowledge the st2 inbox, notify
-  the CoS that normal bus work can resume, and return idle for DING events.
+  set `busy`, drain and acknowledge the st2 inbox, notify the CoS that normal bus
+  work can resume, then set `available` and return idle for DING events.
 
 ## Relay intent, don't pre-chew (an agent's own PR comments / CI)
 
